@@ -1,0 +1,21 @@
+sensor:
+  - platform: mqtt
+    name: ble_mi_band
+    state_topic: "ble/scan/FD:B7:02:92:68:A9"
+    value_template: "{{ value_json.room }}"
+    json_attributes_topic: "ble/scan/FD:B7:02:92:68:A9"
+    json_attributes_template: "{{ {'rssi': value_json.rssi} | tojson }}"
+
+  - platform: mqtt
+    name: ble_tag_czerwony
+    state_topic: "ble/scan/FF:FF:C7:CE:C0:80"
+    value_template: "{{ value_json.room }}"
+    json_attributes_topic: "ble/scan/FF:FF:C7:CE:C0:80"
+    json_attributes_template: "{{ {'rssi': value_json.rssi} | tojson }}"
+
+  - platform: mqtt
+    name: ble_tag_wisiorek
+    state_topic: "ble/scan/FF:FF:C1:13:5F:4A"
+    value_template: "{{ value_json.room }}"
+    json_attributes_topic: "ble/scan/FF:FF:C1:13:5F:4A"
+    json_attributes_template: "{{ {'rssi': value_json.rssi} | tojson }}"
