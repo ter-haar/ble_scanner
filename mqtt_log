@@ -1,0 +1,15 @@
+ble/scan/FF:FF:55:99:F5:93 {"name":"iTAG            ","rssi":-31,"room":"sypialnia"}
+ble/scan/FF:FF:C7:CE:C0:80 {"name":"iTAG            ","rssi":-38,"room":"jacek"}
+ble/scan/FD:B7:02:92:68:A9 {"name":"Mi Smart Band 5","rssi":-59,"room":"jacek"}
+ble/scan/FF:FF:C1:13:5F:4A {"name":"iTAG            ","rssi":-56,"room":"jacek"}
+ble/scan/FF:FF:C7:CE:C0:80 {"name":"iTAG            ","rssi":-38,"room":"jacek"}
+ble/scan/FD:B7:02:92:68:A9 {"name":"Mi Smart Band 5","rssi":-49,"room":"jacek"}
+ble/scan/FF:FF:10:00:4B:74 {"name":"iTAG            ","rssi":-44,"room":"sypialnia"}
+ble/scan/FF:FF:55:99:F5:93 {"name":"iTAG            ","rssi":-32,"room":"sypialnia"}
+ble/scan/FD:B7:02:92:68:A9 {"name":"Mi Smart Band 5","rssi":-56,"room":"jacek"}
+ble/scan/FF:FF:C1:13:5F:4A {"name":"iTAG            ","rssi":-52,"room":"jacek"}
+ble/scan/FD:B7:02:92:68:A9 {"name":"Mi Smart Band 5","rssi":-58,"room":"jacek"}
+ble/scan/FF:FF:10:00:4B:74 {"name":"iTAG            ","rssi":-44,"room":"sypialnia"}
+ble/scan/FD:B7:02:92:68:A9 {"name":"Mi Smart Band 5","rssi":-50,"room":"jacek"}
+ble/scan/FD:B7:02:92:68:A9 {"name":"Mi Smart Band 5","rssi":-42,"room":"pracownia"}
+

@@ -1,0 +1,62 @@
+substitutions:
+  room: pracownia
+
+esphome:
+  name: ble_${room}
+  platform: ESP32
+  board: esp32dev
+wifi:
+  networks:
+  - ssid: !secret network_1_ssid
+    password: !secret network_1_password
+  - ssid: !secret network_2_ssid
+    password: !secret network_2_password
+mqtt:
+  id: mqtt_client
+  broker: !secret mqtt_broker
+  username: !secret mqtt_username
+  password: !secret mqtt_password
+  discovery: True
+  birth_message:
+    topic: ble/${room}/status
+    payload: online
+  will_message:
+    topic: ble/${room}/status
+    payload: offline
+debug:
+logger:
+  level: debug
+ota:
+  safe_mode: False
+
+sensor:
+  - platform: mqtt_subscribe
+    id: min_rssi
+    accuracy_decimals: 0
+    topic: ble/min_rssi/set
+    on_value:
+      then:
+        - mqtt.publish:
+            topic: ble/${room}/min_rssi
+            payload: !lambda |-
+              return String(id(min_rssi).state).c_str();
+
+esp32_ble_tracker:
+  on_ble_advertise:
+    - then:
+        - lambda: |-
+            int rssi;
+            if (id(min_rssi).has_state()) {
+              rssi = id(min_rssi).state;
+            } else {
+              rssi = -70;
+            }
+            // skip too low devices
+            if (x.get_rssi() < rssi) return;
+
+            String topic = String("ble/scan/") + x.address_str().c_str();
+            id(mqtt_client).publish_json(topic.c_str(), [=](JsonObject &root) {
+              root["name"] = x.get_name().c_str();
+              root["rssi"] = x.get_rssi();
+              root["room"] = "${room}";
+            });
