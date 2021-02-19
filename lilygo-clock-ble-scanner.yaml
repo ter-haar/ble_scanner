@@ -1,0 +1,497 @@
+substitutions:
+  room: pracownia
+
+esphome:
+  name: ble_${room}
+  platform: ESP32
+  board: esp32dev
+  on_boot:
+    then:
+      - lambda: |-
+          id(font_id) = id(font_4);
+          id(message) = "";
+          id(x_poz) = 124;
+          id(y_poz) = 70;
+wifi:
+  networks:
+  - ssid: !secret network_1_ssid
+    password: !secret network_1_password
+  - ssid: !secret network_2_ssid
+    password: !secret network_2_password
+debug:
+logger:
+  level: DEBUG
+ota:
+  safe_mode: True
+
+time:
+  - platform: sntp
+    id: sntp_time
+
+output:
+  - platform: gpio
+    pin: GPIO19
+    id: lilygo_green_led
+
+sensor:
+  - platform: mqtt_subscribe
+    id: min_rssi
+    accuracy_decimals: 0
+    topic: ble/min_rssi/set
+    on_value:
+      then:
+        - mqtt.publish:
+            topic: ble/${room}/min_rssi
+            payload: !lambda |-
+              return String(id(min_rssi).state).c_str();
+
+globals:
+  - id: x_poz
+    type: int
+  - id: y_poz
+    type: int
+  - id: font_id
+    type: esphome::display::Font *
+  - id: message
+    type: std::string
+
+mqtt:
+  id: mqtt_client
+  broker: !secret mqtt_broker
+  username: !secret mqtt_username
+  password: !secret mqtt_password
+  discovery: True
+  birth_message:
+    topic: ble/${room}/status
+    payload: online
+  will_message:
+    topic: ble/${room}/status
+    payload: offline
+  on_json_message:
+    topic: ble/${room}/clock/set
+    then:
+      - lambda: |-
+          if (x.containsKey("x_poz"))
+            id(x_poz) = x["x_poz"];
+          if (x.containsKey("y_poz"))
+            id(y_poz) = x["y_poz"];
+
+          if (x.containsKey("message")) {
+            std::string m = x["message"];
+            id(message) = m;
+          }
+
+          if (x.containsKey("font")) {
+            int num = x["font"];
+            switch (num) {
+              case 1:
+                id(font_id) = id(font_1);
+                break;
+              case 2:
+                id(font_id) = id(font_2);
+                break;
+              case 3:
+                id(font_id) = id(font_3);
+                break;
+              case 4:
+                id(font_id) = id(font_4);
+                break;
+              case 5:
+                id(font_id) = id(font_5);
+                break;
+              case 6:
+                id(font_id) = id(font_6);
+                break;
+              case 7:
+                id(font_id) = id(font_7);
+                break;
+              case 8:
+                id(font_id) = id(font_8);
+                break;
+              case 9:
+                id(font_id) = id(font_9);
+                break;
+              case 10:
+                id(font_id) = id(font_10);
+                break;
+              case 11:
+                id(font_id) = id(font_11);
+                break;
+              case 12:
+                id(font_id) = id(font_12);
+                break;
+              case 13:
+                id(font_id) = id(font_13);
+                break;
+              case 14:
+                id(font_id) = id(font_14);
+                break;
+              case 15:
+                id(font_id) = id(font_15);
+                break;
+              case 16:
+                id(font_id) = id(font_16);
+                break;
+              case 17:
+                id(font_id) = id(font_17);
+                break;
+              case 18:
+                id(font_id) = id(font_18);
+                break;
+              case 19:
+                id(font_id) = id(font_19);
+                break;
+              case 20:
+                id(font_id) = id(font_20);
+                break;
+              case 21:
+                id(font_id) = id(font_21);
+                break;
+              case 22:
+                id(font_id) = id(font_22);
+                break;
+              case 23:
+                id(font_id) = id(font_23);
+                break;
+              case 24:
+                id(font_id) = id(font_24);
+                break;
+              case 25:
+                id(font_id) = id(font_25);
+                break;
+              case 26:
+                id(font_id) = id(font_26);
+                break;
+              case 27:
+                id(font_id) = id(font_27);
+                break;
+              case 28:
+                id(font_id) = id(font_28);
+                break;
+              case 29:
+                id(font_id) = id(font_29);
+                break;
+              case 30:
+                id(font_id) = id(font_30);
+                break;
+              case 31:
+                id(font_id) = id(font_31);
+                break;
+              case 32:
+                id(font_id) = id(font_32);
+                break;
+              case 33:
+                id(font_id) = id(font_33);
+                break;
+              case 34:
+                id(font_id) = id(font_34);
+                break;
+              case 35:
+                id(font_id) = id(font_35);
+                break;
+              case 36:
+                id(font_id) = id(font_36);
+                break;
+              case 37:
+                id(font_id) = id(font_37);
+                break;
+              case 38:
+                id(font_id) = id(font_38);
+                break;
+              case 39:
+                id(font_id) = id(font_39);
+                break;
+              case 40:
+                id(font_id) = id(font_40);
+                break;
+              case 41:
+                id(font_id) = id(font_41);
+                break;
+              case 42:
+                id(font_id) = id(font_42);
+                break;
+              case 43:
+                id(font_id) = id(font_33);
+                break;
+              case 44:
+                id(font_id) = id(font_44);
+                break;
+              case 45:
+                id(font_id) = id(font_45);
+                break;
+              case 46:
+                id(font_id) = id(font_46);
+                break;
+              case 47:
+                id(font_id) = id(font_37);
+                break;
+              case 48:
+                id(font_id) = id(font_48);
+                break;
+              case 49:
+                id(font_id) = id(font_49);
+                break;
+              case 50:
+                id(font_id) = id(font_50);
+                break;
+
+              default:
+                id(font_id) = id(font_1);
+                break;
+            }
+          }
+spi:
+  clk_pin: GPIO18
+  mosi_pin: GPIO23
+
+display:
+  - platform: waveshare_epaper
+    dc_pin: GPIO17
+    cs_pin: GPIO5
+    busy_pin: GPIO4
+    reset_pin: GPIO16
+    rotation: 90°
+    model: 2.13in-ttgo-b73
+    update_interval: 10s
+    id: eink
+    lambda: |-
+      if (id(message).length() > 0) {
+        it.print(id(x_poz), id(y_poz), id(font_id), TextAlign::CENTER, id(message).c_str());
+      } else {
+        it.strftime(id(x_poz), id(y_poz), id(font_id), TextAlign::CENTER, "%H:%M", id(sntp_time).now());
+      }
+
+esp32_ble_tracker:
+  on_ble_advertise:
+    - then:
+        - lambda: |-
+            int rssi;
+            if (id(min_rssi).has_state()) {
+              rssi = id(min_rssi).state;
+            } else {
+              rssi = -70;
+            }
+            // skip too low devices
+            if (x.get_rssi() < rssi) return;
+
+            id(lilygo_green_led).turn_on();
+
+            String topic = String("ble/scan/") + x.address_str().c_str();
+            id(mqtt_client).publish_json(topic.c_str(), [=](JsonObject &root) {
+              root["name"] = x.get_name().c_str();
+              root["rssi"] = x.get_rssi();
+              root["room"] = "${room}";
+            });
+
+            id(lilygo_green_led).turn_off();
+
+font:
+  - file: "fonts/Wedgie Regular.ttf"
+    id: font_1
+    size: 44
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/BoogieNightsNFShadow.ttf"
+    id: font_2
+    size: 69
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/3X5.ttf"
+    id: font_3
+    size: 100
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/VICTM.ttf"
+    id: font_4
+    size: 85
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/vaporizedbb_reg.ttf"
+    id: font_5
+    size: 99
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/unicephalon.ttf"
+    id: font_6
+    size: 65
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/20SEVEN.ttf"
+    id: font_7
+    size: 89
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/street cred.ttf"
+    id: font_8
+    size: 82
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/SPOTF.ttf"
+    id: font_9
+    size: 90
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+
+  - file: "fonts/SlugfestNF.ttf"
+    id: font_10
+    size: 88
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/Sho-CardCapsNF.ttf"
+    id: font_11
+    size: 86
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/papercut.ttf"
+    id: font_12
+    size: 91
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/256 bytes.ttf"
+    id: font_13
+    size: 97
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/actionis.ttf"
+    id: font_14
+    size: 97
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/adriator.ttf"
+    id: font_15
+    size: 112
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/Answer3DFilled.ttf"
+    id: font_16
+    size: 101
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/ANTICLIMAX.ttf"
+    id: font_17
+    size: 81
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/BeautySchoolDropoutII.ttf"
+    id: font_18
+    size: 130
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/BellhopNF.ttf"
+    id: font_19
+    size: 46
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+
+  - file: "fonts/Blox2.ttf"
+    id: font_20
+    size: 88
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/vtks morning rain 3D.ttf"
+    id: font_21
+    size: 84
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/TickingTimebombBB.ttf"
+    id: font_22
+    size: 120
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/supercomputer.ttf"
+    id: font_23
+    size: 90
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/Suggested3DFilled.ttf"
+    id: font_24
+    size: 70
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/street cred.ttf"
+    id: font_25
+    size: 86
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/squealer embossed.ttf"
+    id: font_26
+    size: 96
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/SPOTF.ttf"
+    id: font_27
+    size: 91
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/SpiralST.ttf"
+    id: font_28
+    size: 122
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/SpasticNerfbag.ttf"
+    id: font_29
+    size: 136
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/SpacePatrol.ttf"
+    id: font_30
+    size: 90
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+
+  - file: "fonts/Royalbean.ttf"
+    id: font_31
+    size: 110
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/Rom_ftl_lcd.ttf"
+    id: font_32
+    size: 160
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/ROBOTICA.ttf"
+    id: font_33
+    size: 60
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/RitzyRemixNF.ttf"
+    id: font_34
+    size: 78
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/Rickles.ttf"
+    id: font_35
+    size: 73
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/RialtoNF.ttf"
+    id: font_36
+    size: 85
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/RhubarbPie.ttf"
+    id: font_37
+    size: 79
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/BALLSONTHERAMPAGE.ttf"
+    id: font_38
+    size: 110
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/Pinewood.ttf"
+    id: font_39
+    size: 99
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/pindwnxp.ttf"
+    id: font_40
+    size: 123
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+
+  - file: "fonts/Letterblocks.ttf"
+    id: font_41
+    size: 106
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/KLINOM.ttf"
+    id: font_42
+    size: 135
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/KGSummerSunshineBlackout.ttf"
+    id: font_43
+    size: 64
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/Hodor.ttf"
+    id: font_44
+    size: 79
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/gunplay 3d.ttf"
+    id: font_45
+    size: 82
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/Gruvilicious.ttf"
+    id: font_46
+    size: 122
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/grudge2.ttf"
+    id: font_47
+    size: 84
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/GingerPeachyNF.ttf"
+    id: font_48
+    size: 68
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/dignity of labour.ttf"
+    id: font_49
+    size: 101
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+  - file: "fonts/crystal radio kit.ttf"
+    id: font_50
+    size: 71
+    glyphs: [':', '-', '.', ' ', '0','1','2','3','4','5','6','7','8','9']
+
+  - file: "fonts/OpenSans.ttf"
+    id: default_font
+    size: 12
+    glyphs: ['!', '"', '%', '(', ')', '+', ',','-','_','.',':','°','0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','Ą','Ś','Ż','Ź','Ć','Ę','Ó','Ł','Ń',' ','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','ą','ś','ż','ź','ć','ę','ó','ł','ń']
